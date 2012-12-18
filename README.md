@@ -6,7 +6,7 @@ A curses Google Play Music client
 'thunner' - thunder (Doric Scots)
 
 Requirements
-____________
+------------
 
 * Python 2
 * Simon Weber's Unofficial Google Music API
@@ -15,7 +15,7 @@ ____________
 * One or more internets
 
 Keys
-____
+----
 
 Arrow keys : menu navigation
 enter : play
@@ -25,7 +25,7 @@ spacebar : pause
 q : quit
 
 Configuration
-_____________
+-------------
 
 Configuration of thunner is via `~/.thunnerrc`. An example file is as follows:
 
@@ -68,8 +68,8 @@ Where the above are not defined in `~/.thunnerrc` they default to `default` whic
 
 For consitency's sake, in the code I've spelt "colour" as "color".
 
-TODO
-____
+TO DO
+-----
 
 * Add a random mode
 * Check compatibility with other OSes
@@ -79,6 +79,6 @@ ____
 * Hide lag from API calls
 
 Known Issues
-____________
+------------
 
 * API calls can be slow causing lag between input and playback. Avoid switching songs too quickly (with 'next', 'previous', etc.)
