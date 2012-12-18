@@ -51,7 +51,7 @@ def parse_config():
                       'current-item':'default',
                       'text':'default' }
     config = { 'colors':[], 'assignments':defaultcolors }
-    with open(os.path.expanduser("~/.thunnerc")) as f:
+    with open(os.path.expanduser("~/.thunnerrc")) as f:
         lines = f.readlines()
         for i in lines:
             words = i.split()
