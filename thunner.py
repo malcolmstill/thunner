@@ -41,7 +41,7 @@ from getpass import getpass
 from operator import itemgetter
 
 def parse_config():
-    defaultcolors = { 'thunder':'default',
+    defaultcolors = { 'thunner':'default',
                       'header-text':'default',
                       'header-sep':'default',
                       'header-border':'default',
@@ -51,7 +51,7 @@ def parse_config():
                       'current-item':'default',
                       'text':'default' }
     config = { 'colors':[], 'assignments':defaultcolors }
-    with open(os.path.expanduser("~/.thunderrc")) as f:
+    with open(os.path.expanduser("~/.thunnerc")) as f:
         lines = f.readlines()
         for i in lines:
             words = i.split()
@@ -136,7 +136,7 @@ def drawline(scr,y,width,cs):
         c += 1
     
 def header(scr,width,parents,current,code,colors,colormap):
-    locstring = [('thunder','thunder')]
+    locstring = [('thunner','thunner')]
     for i in parents[1:]:
         locstring.append((' > ','header-sep'))
         locstring.append((i['name'],'header-text'))
