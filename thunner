@@ -53,18 +53,22 @@ def parse_config():
                       'current-item':'default',
                       'text':'default' }
     config = { 'colors':[], 'assignments':defaultcolors }
-    with open(os.path.expanduser("~/.thunnerrc")) as f:
-        lines = f.readlines()
-        for i in lines:
-            words = i.split()
-            if words[0] == 'email':
-                config['email'] = words[1]
-            elif words[0] == 'pass':
-                config['pass'] = i.split(' ',1)[1]
-            elif words[0] == 'color':
-                config['colors'].append((words[1],words[2],words[3]))
-            elif words[0] == 'assign':
-                config['assignments'][words[2]] = words[1]
+    try:
+        with open(os.path.expanduser("~/.thunnerrc")) as f:
+            lines = f.readlines()
+            for i in lines:
+                words = i.split()
+                if words[0] == 'email':
+                    config['email'] = words[1]
+                elif words[0] == 'pass':
+                    config['pass'] = i.split(' ',1)[1]
+                elif words[0] == 'color':
+                    config['colors'].append((words[1],words[2],words[3]))
+                elif words[0] == 'assign':
+                    config['assignments'][words[2]] = words[1]
+    except IOError:
+        print "Can't find ~/.thunnerrc"
+        sys.exit()
     return config
 
 def color(c):
