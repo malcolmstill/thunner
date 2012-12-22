@@ -9,7 +9,7 @@ Requirements
 ------------
 
 * Python 2
-* Simon Weber's Unofficial Google Music API
+* [weber]
 * mplayer
 * Some songs on Google Play Music
 * One or more internets
@@ -91,3 +91,5 @@ Known Issues
 
 * Compilations aren't currently handled well; Going to "Albums" will show n copies of an compilation album where n is the number of different artists on the album.
 * API calls can be slow causing lag between input and playback. Avoid switching songs too quickly (with 'next', 'previous', etc.)
+
+[weber]: https://github.com/simon-weber/Unofficial-Google-Music-API "Simon Weber's Unofficial Google Music API"
