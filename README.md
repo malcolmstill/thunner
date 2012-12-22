@@ -15,6 +15,11 @@ Requirements
 * One or more internets
 * A colour terminal
 
+Usage
+-----
+
+Chmod `thunner` and add to your path. Make sure you have a `~/.thunnerrc` file; see below for configuration.
+
 Keys
 ----
 
