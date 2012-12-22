@@ -9,7 +9,7 @@ Requirements
 ------------
 
 * Python 2
-* [weber]
+* [Simon Weber's Unofficial Google Music API][weber]
 * mplayer
 * Some songs on Google Play Music
 * One or more internets
