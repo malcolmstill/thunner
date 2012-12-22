@@ -72,27 +72,7 @@ Where the above are not defined in `~/.thunnerrc` they default to `default` whic
 
 For consitency's sake I've spelt "colour" as "color" in the code.
 
-thunner also checks for `~/.thunnerlogo` on start-up and will show the contents of said file whilst connecting. An example `~/.thunnerlogo`:
-
-
-
-			    ``,,,,::,,,.``                          
-		  `:`::::::::::::::::::::::::::::.:`                
-	     `:;:::::::::::,,,,:,,,,,,,,.,,::::::::::,:,`           
-	  ';;;;;;;:::,.`                      `.,,,,:::::::'        
-       `;;;::::;:`                                  `,,,,:::::`     
-     `':::,,:;`                                        `::::,,,;`   
-       .,:;:`                                            `::,,.     
-	.:'`          `''''';''        ;:;;;;''`          `':.      
-      `:,:'+'.   `:::#';::;;;;'#`    `+'::::::;+#,:,`   .'+;::;`    
-      `,,:::`;:::;,::+;:;;:;;;'#`    `#';;;;:::'+':,;::::.,::::`    
-	`,:::::;;':;;+;::::;;;'#`    `#';;;;;;;'++;:';;::::::`      
-	   `;:::::::;+;:::;;''+#`    `#';;;;;;;'+';:;::::;`         
-	   `,.;:;;::;+;;'';;;''#`    `#';;;;;;;'+';:;;;;;,`         
-	     ..,,::;;#'''';';''#`    `#';;;;;;;'#';,::::.           
-	       `,,,,:@';;;;';''#`    `#';;;;;;;'+;,.,,`             
-		  ````+;;;;;;;;.      .';;;;:::'````                
-
+thunner also checks for `~/.thunnerlogo` on start-up and will show the contents of said file whilst connecting.
 
 To Do
 -----
