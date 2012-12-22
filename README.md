@@ -13,16 +13,18 @@ Requirements
 * mplayer
 * Some songs on Google Play Music
 * One or more internets
+* A colour terminal
 
 Keys
 ----
 
-Arrow keys : menu navigation
-enter : play
-. : next
-, : previous
-spacebar : pause 
-q : quit
+* Arrow keys : menu navigation
+* enter : play (plays whatever is under the cursor, be that a song/album/artist or higher level menu item, but also queues the rest of the items in the current menu playing down the list and looping round to the top)
+* ] : play (plays only the item under the cursor, be that a song/album/artist or higher level menu item.
+* . : next
+* , : previous
+* spacebar : pause 
+* q : quit
 
 Configuration
 -------------
@@ -57,8 +59,10 @@ Configuration of thunner is via `~/.thunnerrc`. An example file is as follows:
 * `header-sep` - colour of separators between header text
 * `header-border` - colour of border below header
 * `footer-border` - colour of border above footer
+* `footer-sep` - colour of separators between footer text
 * `status` - colour of status (playing/paused/stopped)
-* `currently-playing` - colour of currently playing item (in menu) [NOT SUPPORTED YET]
+* `current-artist` - colour of currently playing artist in footer
+* `current-song` - colour of currently playing song in footer
 * `current-item` - colour of highlighted row in menu
 * `text` - other rows in menu
 
@@ -66,12 +70,36 @@ Where the above are not defined in `~/.thunnerrc` they default to `default` whic
 
       color default default default
 
-For consitency's sake, in the code I've spelt "colour" as "color".
+For consitency's sake I've spelt "colour" as "color" in the code.
 
-TO DO
+thunner also checks for `~/.thunnerlogo` on start-up and will show the contents of said file whilst connecting. An example `~/.thunnerlogo`:
+
+
+
+			    ``,,,,::,,,.``                          
+		  `:`::::::::::::::::::::::::::::.:`                
+	     `:;:::::::::::,,,,:,,,,,,,,.,,::::::::::,:,`           
+	  ';;;;;;;:::,.`                      `.,,,,:::::::'        
+       `;;;::::;:`                                  `,,,,:::::`     
+     `':::,,:;`                                        `::::,,,;`   
+       .,:;:`                                            `::,,.     
+	.:'`          `''''';''        ;:;;;;''`          `':.      
+      `:,:'+'.   `:::#';::;;;;'#`    `+'::::::;+#,:,`   .'+;::;`    
+      `,,:::`;:::;,::+;:;;:;;;'#`    `#';;;;:::'+':,;::::.,::::`    
+	`,:::::;;':;;+;::::;;;'#`    `#';;;;;;;'++;:';;::::::`      
+	   `;:::::::;+;:::;;''+#`    `#';;;;;;;'+';:;::::;`         
+	   `,.;:;;::;+;;'';;;''#`    `#';;;;;;;'+';:;;;;;,`         
+	     ..,,::;;#'''';';''#`    `#';;;;;;;'#';,::::.           
+	       `,,,,:@';;;;';''#`    `#';;;;;;;'+;,.,,`             
+		  ````+;;;;;;;;.      .';;;;:::'````                
+
+
+To Do
 -----
 
 * Add a random mode
+* Add the ability to define new playlists
+* Fix compilations under "Artists"
 * Check compatibility with other OSes
 * Add more customisations
 * Add RGB definition to configuration file for terminals that support `init_color`
@@ -81,4 +109,5 @@ TO DO
 Known Issues
 ------------
 
+* Compilations aren't currently handled well; Going to "Albums" will show n copies of an compilation album where n is the number of different artists on the album.
 * API calls can be slow causing lag between input and playback. Avoid switching songs too quickly (with 'next', 'previous', etc.)

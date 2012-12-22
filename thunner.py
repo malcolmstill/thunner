@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python2
 
 # Copyright (c) <2012>, <Malcolm Still a.k.a. klltkr>
 # All rights reserved.
@@ -46,8 +46,10 @@ def parse_config():
                       'header-sep':'default',
                       'header-border':'default',
                       'footer-border':'default',
+                      'footer-sep':'default',
                       'status':'default',
-                      'currently-playing':'default',
+                      'current-artist':'default',
+                      'current-song':'default',
                       'current-item':'default',
                       'text':'default' }
     config = { 'colors':[], 'assignments':defaultcolors }
@@ -118,22 +120,21 @@ def scrrelease(s):
     curses.echo()
     curses.endwin()
 
-def drawstring(scr,y,x,width,cslist,colors,colormap):
+def drawstring(scr,y,x,width,cslist,code,colors,colormap):
     for i in cslist:
         s = i[0]
         col = i[1]
         if (width - x) > 0:
-            scr.addnstr(y,x,s,width-x,curses.color_pair(colors[colormap[col]]))
+            scr.addnstr(y,x,s.encode(code),width-x,curses.color_pair(colors[colormap[col]]))
         x += len(s)
 
-def drawline(scr,y,width,cs):
+def drawline(scr,y,width,slen,cs):
     s = cs[0]
     col = cs[1]
     scr.addnstr(y,0,s,width,curses.color_pair(col))
-    c = len(s)
-    for i in range(c,width):
-        scr.addstr(y,c,' ',curses.color_pair(col))
-        c += 1
+    for i in range(slen,width):
+        scr.addstr(y,slen,' ',curses.color_pair(col))
+        slen += 1
     
 def header(scr,width,parents,current,code,colors,colormap):
     locstring = [('thunner','thunner')]
@@ -143,14 +144,14 @@ def header(scr,width,parents,current,code,colors,colormap):
     if parents:
         locstring.append((' > ','header-sep'))
         locstring.append((current['name'],'header-text'))
-    drawstring(scr,0,0,width,locstring,colors,colormap)
+    drawstring(scr,0,0,width,locstring,code,colors,colormap)
     for i in range(0,width):
         scr.addch(1,i,curses.ACS_HLINE,curses.color_pair(colors[colormap['header-border']]))
 
 def footer(scr,height,width,status,code,colors,colormap):
     for i in range(0,width):
         scr.addch(height-2,i,curses.ACS_HLINE,curses.color_pair(colors[colormap['footer-border']]))
-    drawstring(scr,height-1,0,width,status,colors,colormap)
+    drawstring(scr,height-1,0,width,status,code,colors,colormap)
 
 def drawlist(scr,list_height,width,offset,songs,item,code,colors,colormap):
     n_songs = len(songs)
@@ -171,12 +172,13 @@ def drawlist(scr,list_height,width,offset,songs,item,code,colors,colormap):
                 s = str(song['track']) + '. ' + song['name']
             else:
                 s = song["name"]
+            slen = len(s)
             s = s.encode(code)
             try:
                 if i == item:
-                    drawline(scr,offset+i-cl,width,(s,colors[colormap['current-item']]))
+                    drawline(scr,offset+i-cl,width,slen,(s,colors[colormap['current-item']]))
                 else:
-                    drawline(scr,offset+i-cl,width,(s,colors[colormap['text']]))
+                    drawline(scr,offset+i-cl,width,slen,(s,colors[colormap['text']]))
             except curses.error:
                 pass
         else:
@@ -241,11 +243,14 @@ def list_playlists(api,playlist_ids):
     return playlists 
 
 def headphones(scr,height,code):
-    with open(os.path.expanduser("~/.ngmusiclogo")) as f:
-        lines = f.readlines()
-        for i in range(0,len(lines)-1):
-            if i < height-1:
-                scr.addstr(i,0,lines[i].encode(code))
+    try:
+        with open(os.path.expanduser("~/.thunnerlogo")) as f:
+            lines = f.readlines()
+            for i in range(0,len(lines)-1):
+                if i < height-1:
+                    scr.addstr(i,0,lines[i].encode(code))
+    except IOError:
+        scr.addstr(0,0,"Connecting...".encode(code))
 
 def switch_menu(menu):
     new_list = menu["subtree"]
@@ -299,8 +304,6 @@ def main():
         c_item = c_menu["subtreeline"]
         c_n = len(c_list)
         
-        mode = "multi" # "list loop" or "single"
-
         previous = []
         
         timeout = 17 # getch timeout in ms
@@ -340,19 +343,19 @@ def main():
                     break
                 else:
                     break
-            elif c == ord('\n'):
+            elif c == ord('\n') or c == ord(']'):
                 if c_list:
                     i = c_list[c_item]
                     if isinstance(playing, subprocess.Popen):
                         playing.terminate()
                         queue = []
-                    if mode == "multi":
+                    if c == ord('\n'):
                         if c_list != []:
                             l, n = collect(c_list,[],c_item)
                             queue = l
                             q_n = n
                             q_length = len(queue)
-                    elif mode == "single":
+                    elif c == ord(']'):
                         if 'id' in i:
                             queue = [i]
                             q_n = 0
@@ -418,9 +421,9 @@ def main():
             else:
                 footer(scr,height,width,[(status,'status'),
                                          (' ','text'),
-                                         (current_song['artist'],'text'),
-                                         (' - ','text'),
-                                         (current_song['name'],'text')],code,colors,colormap)
+                                         (current_song['artist'],'current-artist'),
+                                         (' - ','footer-sep'),
+                                         (current_song['name'],'current-song')],code,colors,colormap)
             drawlist(scr,viewheight,width,header_height,c_list,c_item,code,colors,colormap)
             scr.refresh()
     finally:
