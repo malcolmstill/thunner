@@ -275,6 +275,7 @@ def main():
     colors = name_colors(config['colors'])
     colormap = config['assignments']
 
+    api = None
     playing = None
     try:
         height, width = scr.getmaxyx()
@@ -434,7 +435,8 @@ def main():
         if isinstance(playing, subprocess.Popen):
             playing.terminate()
         scrrelease(scr)
-        api.logout()
+        if api:
+            api.logout()
     return
 
 if __name__ == '__main__':
