@@ -66,6 +66,9 @@ def parse_config():
                     config['colors'].append((words[1],words[2],words[3]))
                 elif words[0] == 'assign':
                     config['assignments'][words[2]] = words[1]
+            if 'pass' not in config:
+		    # If Password not in Config, ask for it
+		    config['pass'] = getpass()
     except IOError:
         print "Can't find ~/.thunnerrc"
         sys.exit()
