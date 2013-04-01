@@ -243,10 +243,9 @@ def gen_trees(library):
 
 def list_playlists(api,playlist_ids):
     playlists = []
-    for name,pid in playlist_ids['user'].iteritems():
-        playlists.append( { "name":name, "subtree":api.get_playlist_songs(pid), "subtreeline":0 } )
-    for name,pid in playlist_ids['auto'].iteritems():
-        playlists.append( { "name":name, "subtree":api.get_playlist_songs(pid), "subtreeline":0 } )
+    for name,pids in playlist_ids['user'].iteritems():
+        for pid in pids:
+            playlists.append( { "name":name, "subtree":api.get_playlist_songs(pid), "subtreeline":0 } )
     return playlists 
 
 def headphones(scr,height,code):
