@@ -2,7 +2,7 @@
 
 # Copyright (c) <2012>, <Malcolm Still a.k.a. klltkr>
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #     * Redistributions of source code must retain the above copyright
@@ -13,7 +13,7 @@
 #     * Neither the name of the <organization> nor the
 #       names of its contributors may be used to endorse or promote products
 #       derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -36,7 +36,7 @@ import signal
 
 from Queue import Queue, Empty
 from threading import Thread
-from gmusicapi.api import Api
+from gmusicapi import Webclient
 from getpass import getpass
 from operator import itemgetter
 
@@ -105,10 +105,7 @@ def name_colors(colordefs):
     return colormap
 
 def apiinit(email,password):
-    api = Api()
-    
-    logged_in = False
-    attempts = 0
+    api = Webclient()
     api.login(email, password)
     return api
 
@@ -142,7 +139,7 @@ def drawline(scr,y,width,slen,cs):
     for i in range(slen,width):
         scr.addstr(y,slen,' ',curses.color_pair(col))
         slen += 1
-    
+
 def header(scr,width,parents,current,code,colors,colormap):
     locstring = [('thunner','thunner')]
     for i in parents[1:]:
@@ -232,12 +229,12 @@ def gen_trees(library):
             album_name = album
             if album == "":
                 album_name = "Untitled Album"
-            albums_of_artist.append({ "name":album_name, 
-                                      "subtree":sorted(tracks,key=itemgetter('track')), 
+            albums_of_artist.append({ "name":album_name,
+                                      "subtree":sorted(tracks,key=itemgetter('track')),
                                       "subtreeline":0 })
         albums = albums + albums_of_artist
-        artists.append({ "name":artist, 
-                         "subtree":sorted(albums_of_artist,key=lambda x: x['name'].lower()), 
+        artists.append({ "name":artist,
+                         "subtree":sorted(albums_of_artist,key=lambda x: x['name'].lower()),
                          "subtreeline":0 })
     return sorted(artists, key=lambda x: x['name'].lower()), sorted(albums, key=lambda x: x['name'].lower())
 
@@ -246,7 +243,7 @@ def list_playlists(api,playlist_ids):
     for name,pids in playlist_ids['user'].iteritems():
         for pid in pids:
             playlists.append( { "name":name, "subtree":api.get_playlist_songs(pid), "subtreeline":0 } )
-    return playlists 
+    return playlists
 
 def headphones(scr,height,code):
     try:
@@ -263,9 +260,9 @@ def switch_menu(menu):
     new_item = menu["subtreeline"]
     new_n = len(new_list)
     return menu, new_list, new_item, new_n
-        
+
 def main():
-    
+
     config = parse_config()
 
     # Because I'd like to see some umlauts (rather than garbage):
@@ -287,11 +284,11 @@ def main():
         scr.refresh()
 
         api = apiinit(config['email'],config['pass'])
-        
+
         if not api.is_authenticated():
             print "Credentials were not accepted. Exiting..."
             return
-    
+
         library = api.get_all_songs()
         artists, albums = gen_trees(library)
 
@@ -300,32 +297,32 @@ def main():
 
         scr.clear()
         toplevel = { "name":"Toplevel",
-                     "subtree":[ {"name":"Artists", "subtree":artists, "subtreeline":0 }, 
-                                 {"name":"Albums", "subtree":albums, "subtreeline":0 }, 
-                                 {"name":"Songs", "subtree":library, "subtreeline":0 }, 
+                     "subtree":[ {"name":"Artists", "subtree":artists, "subtreeline":0 },
+                                 {"name":"Albums", "subtree":albums, "subtreeline":0 },
+                                 {"name":"Songs", "subtree":library, "subtreeline":0 },
                                  {"name":"Playlists", "subtree":playlists, "subtreeline":0 }],
                      "subtreeline":0 }
-        
+
         c_menu = toplevel
         c_list = c_menu["subtree"]
         c_item = c_menu["subtreeline"]
         c_n = len(c_list)
-        
+
         previous = []
-        
+
         timeout = 17 # getch timeout in ms
 
         header_height = 2
         footer_height = 2
         viewheight = height-header_height-footer_height
-        
+
         queue = []
         q_n = 0
         q_length = 0
 
         status = 'Stopped'
         current_song = None
-        
+
         scr.erase()
         header(scr,width,previous,c_menu,code,colors,colormap)
         footer(scr,height,width,[(status,'status')],code,colors,colormap)
@@ -343,7 +340,7 @@ def main():
                     song = queue[q_n]
                     playing = play(api.get_stream_url(song['id']))
                     current_song = song
-            elif c == ord('q'): 
+            elif c == ord('q'):
                 if isinstance(playing, subprocess.Popen):
                     playing.terminate()
                     playing = None
@@ -376,7 +373,7 @@ def main():
                         song = queue[q_n]
                         current_song = song
                         status = 'Playing:'
-                        playing = play(api.get_stream_url(song['id']))
+                        playing = play(api.get_stream_urls(song['id'])[0])
             elif c == ord('.'):
                 if isinstance(playing, subprocess.Popen):
                     playing.terminate()
@@ -400,7 +397,7 @@ def main():
                 if c_list and "subtree" in c_list[c_item]:
                     previous.append(c_menu)
                     c_menu, c_list, c_item, c_n = switch_menu(c_list[c_item])
-            elif c == curses.KEY_DOWN: 
+            elif c == curses.KEY_DOWN:
                 if c_item < c_n-1:
                     c_item += 1
                 c_menu["subtreeline"] = c_item
