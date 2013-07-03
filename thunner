@@ -338,7 +338,7 @@ def main():
                     # Song has stopped playing
                     q_n = (q_n + 1) % len(queue)
                     song = queue[q_n]
-                    playing = play(api.get_stream_urls(song['id'])[0])
+                    playing = play(api.get_stream_url(song['id']))
                     current_song = song
             elif c == ord('q'):
                 if isinstance(playing, subprocess.Popen):
@@ -373,13 +373,13 @@ def main():
                         song = queue[q_n]
                         current_song = song
                         status = 'Playing:'
-                        playing = play(api.get_stream_urls(song['id'])[0])
+                        playing = play(api.get_stream_url(song['id']))
             elif c == ord('.'):
                 if isinstance(playing, subprocess.Popen):
                     playing.terminate()
                     q_n = (q_n + 1) % len(queue)
                     song = queue[q_n]
-                    playing = play(api.get_stream_urls(song['id'])[0])
+                    playing = play(api.get_stream_url(song['id']))
                     current_song = song
                     status = 'Playing:'
             elif c == ord(','):
@@ -387,7 +387,7 @@ def main():
                     playing.terminate()
                     q_n = (q_n - 1) % len(queue)
                     song = queue[q_n]
-                    playing = play(api.get_stream_urls(song['id'])[0])
+                    playing = play(api.get_stream_url(song['id']))
                     current_song = song
                     status = 'Playing:'
             elif c == curses.KEY_LEFT:
